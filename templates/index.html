@@ -2,60 +2,148 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Weather & News Assistant</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Weather & News Agent</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <div class="chat-container">
-        <h1>Weather & News Assistant</h1>
-        <div id="chat-box" class="chat-box"></div>
-        <div class="input-row">
-            <input type="text" id="user-input" placeholder="Poochho weather ya news ke baare mein..." />
-            <button id="send-btn">Send</button>
-        </div>
+    <div class="background-animation"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="top-nav">
+            <div class="logo">
+                <i class="fa-solid fa-robot"></i>
+                <span>Nexus Agent</span>
+            </div>
+            <div class="status">
+                <span class="dot"></span> Online
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <main class="dashboard">
+            <!-- Weather Section -->
+            <section class="glass-card weather-panel">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-cloud-sun"></i> Live Weather</h2>
+                    <span class="location">Pakistan</span>
+                </div>
+                <div class="weather-content">
+                    <div class="temp-display">
+                        <h1>28°</h1>
+                        <p>Partly Cloudy</p>
+                    </div>
+                    <div class="weather-details">
+                        <div class="detail-item">
+                            <i class="fa-solid fa-droplet"></i>
+                            <span>Humidity: 65%</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fa-solid fa-wind"></i>
+                            <span>Wind: 12 km/h</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- News Section -->
+            <section class="glass-card news-panel">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-newspaper"></i> Top Headlines</h2>
+                </div>
+                <div class="news-list">
+                    <!-- News Item 1 -->
+                    <div class="news-item">
+                        <div class="news-text">
+                            <h3>AI Technology reaches new heights in 2026</h3>
+                            <p>Global tech leaders announce major breakthroughs in autonomous agents.</p>
+                        </div>
+                    </div>
+                    <!-- News Item 2 -->
+                    <div class="news-item">
+                        <div class="news-text">
+                            <h3>Global Markets rally after new policies</h3>
+                            <p>Investors show optimism as new economic frameworks are deployed.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Agent Chat Input -->
+        <footer class="agent-interaction">
+            <div class="chat-input-wrapper glass-card">
+                <input type="text" placeholder="Ask me about the weather or latest news..." id="userInput">
+                <button class="send-btn" id="sendBtn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </footer>
     </div>
 
     <script>
-        const chatBox = document.getElementById("chat-box");
-        const userInput = document.getElementById("user-input");
-        const sendBtn = document.getElementById("send-btn");
-
-        function addMessage(text, sender) {
-            const msg = document.createElement("div");
-            msg.classList.add("message", sender);
-            msg.textContent = text;
-            chatBox.appendChild(msg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        
+        // Aapka live Railway link
+        const baseUrl = 'https://weather-news-agent-python-production.up.railway.app';
+    
         async function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
-
-            addMessage(message, "user");
-            userInput.value = "";
-
-            addMessage("Soch raha hoon...", "bot-loading");
-
+            const text = userInput.value.trim();
+            if (!text) return;
+    
+            // Button aur input ko disable kar dein jab tak jawab na aaye
+            const originalPlaceholder = userInput.placeholder;
+            userInput.value = '';
+            userInput.placeholder = 'Agent is thinking...';
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+    
             try {
-                const response = await fetch("/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: message })
+                // Yahan '/chat' ki jagah wo likhein jo aapne Python mein route banaya hai (jaise /ask, /api, ya /chat)
+                const response = await fetch(`${baseUrl}/chat`, { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // JSON format mein data bhej rahe hain. Check karein aapka Python code 'message' expect kar raha hai ya 'query'
+                    body: JSON.stringify({ message: text })
                 });
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
                 const data = await response.json();
-
-                document.querySelector(".bot-loading").remove();
-                addMessage(data.message, "bot");
+                console.log("Agent ka jawab:", data);
+                
+                // Jawab ko screen par dikhane ke liye alert (Aap isko baad mein UI mein bhi design karwa sakte hain)
+                alert("Agent ne kaha: " + JSON.stringify(data));
+    
             } catch (error) {
-                document.querySelector(".bot-loading").remove();
-                addMessage("Error: server se response nahi mila.", "bot");
+                console.error("Connection Error:", error);
+                alert("Agent se connect nahi ho paya. Console check karein.");
+            } finally {
+                // Wapas normal state mein layein
+                userInput.placeholder = originalPlaceholder;
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                userInput.focus();
             }
         }
-
-        sendBtn.addEventListener("click", sendMessage);
-        userInput.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") sendMessage();
+    
+        sendBtn.addEventListener('click', sendMessage);
+    
+        userInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
         });
     </script>
 </body>
