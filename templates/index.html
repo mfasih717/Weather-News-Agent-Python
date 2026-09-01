@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather & News Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Weather & News Assistant</h1>
+        <div id="chat-box" class="chat-box"></div>
+        <div class="input-row">
+            <input type="text" id="user-input" placeholder="Poochho weather ya news ke baare mein..." />
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const userInput = document.getElementById("user-input");
+        const sendBtn = document.getElementById("send-btn");
+
+        function addMessage(text, sender) {
+            const msg = document.createElement("div");
+            msg.classList.add("message", sender);
+            msg.textContent = text;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, "user");
+            userInput.value = "";
+
+            addMessage("Soch raha hoon...", "bot-loading");
+
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await response.json();
+
+                document.querySelector(".bot-loading").remove();
+                addMessage(data.message, "bot");
+            } catch (error) {
+                document.querySelector(".bot-loading").remove();
+                addMessage("Error: server se response nahi mila.", "bot");
+            }
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+        userInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
+</body>
+</html>
