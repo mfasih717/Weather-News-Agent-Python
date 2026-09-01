@@ -91,6 +91,8 @@ def get_news(query: str) -> str:
         return "Sorry, something went wrong while fetching the news."
 
 # ---------- AGENT SETUP ----------
+print("DEBUG - GROQ_API_KEY present:", bool(os.getenv("GROQ_API_KEY")))
+print("DEBUG - GROQ_API_KEY length:", len(os.getenv("GROQ_API_KEY", "")))
 
 # Groq ko OpenAI-compatible client ke through point kiya
 groq_client = AsyncOpenAI(
