@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AURA — Weather & News AI</title>
+
+    <!-- IMPORTANT: FastAPI static path -->
+    <link rel="stylesheet" href="/static/style.css?v=10">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Background -->
+<div class="bg-glow glow-one"></div>
+<div class="bg-glow glow-two"></div>
+<div class="bg-grid"></div>
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="navbar">
+
+    <div class="logo-area">
+
+        <div class="logo-icon">
+            ✦
+        </div>
+
+        <div class="logo-text">
+            <div class="logo-name">AURA</div>
+            <div class="logo-subtitle">
+                WEATHER & NEWS AI
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="online-status">
+        <span class="online-dot"></span>
+        AI ONLINE
+    </div>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="small-label">
+            <span></span>
+            INTELLIGENT INFORMATION, SIMPLIFIED
+        </div>
+
+        <h1>
+            Ask the world.
+            <br>
+            <span>Get the answer.</span>
+        </h1>
+
+        <p>
+            AURA is your intelligent weather and news assistant.
+            Ask naturally about any city, the latest headlines,
+            technology, business, world news and more.
+        </p>
+
+
+        <div class="quick-buttons">
+
+            <button
+                class="quick-button"
+                data-message="What's the weather in Faisalabad?"
+            >
+                ☀️ Faisalabad weather
+            </button>
+
+            <button
+                class="quick-button"
+                data-message="What's the latest news today?"
+            >
+                📰 Latest news
+            </button>
+
+            <button
+                class="quick-button"
+                data-message="What's the weather in Lahore?"
+            >
+                📍 Lahore weather
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI VISUAL -->
+
+    <div class="hero-visual">
+
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="orbit orbit-three"></div>
+
+        <div class="ai-glow"></div>
+
+        <div class="ai-core">
+            <div class="core-inner">
+                ✦
+            </div>
+        </div>
+
+
+        <div class="floating-card weather-card">
+
+            <div class="floating-icon">
+                ☀️
+            </div>
+
+            <div>
+                <small>WEATHER</small>
+                <strong>Live conditions</strong>
+            </div>
+
+        </div>
+
+
+        <div class="floating-card news-card">
+
+            <div class="floating-icon">
+                📰
+            </div>
+
+            <div>
+                <small>NEWS</small>
+                <strong>Latest headlines</strong>
+            </div>
+
+        </div>
+
+
+        <div class="ai-ready">
+            <span></span>
+            AURA READY
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= ASSISTANT ================= -->
+
+<section class="assistant-section" id="assistant">
+
+    <div class="section-heading">
+
+        <div>
+
+            <div class="small-label">
+                AURA ASSISTANT
+            </div>
+
+            <h2>
+                Your intelligent
+                <span>information desk.</span>
+            </h2>
+
+        </div>
+
+
+        <button id="newChatButton" class="new-chat">
+            ↻ New chat
+        </button>
+
+    </div>
+
+
+
+    <div class="assistant-container">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                TRY ASKING
+            </div>
+
+
+            <button
+                class="suggestion"
+                data-message="What's the current weather in Faisalabad?"
+            >
+
+                <div class="suggestion-icon">
+                    ☀️
+                </div>
+
+                <div>
+                    <strong>Current weather</strong>
+                    <small>Temperature & conditions</small>
+                </div>
+
+            </button>
+
+
+
+            <button
+                class="suggestion"
+                data-message="What's the weather in Islamabad?"
+            >
+
+                <div class="suggestion-icon">
+                    🌡️
+                </div>
+
+                <div>
+                    <strong>Weather by city</strong>
+                    <small>Ask about any location</small>
+                </div>
+
+            </button>
+
+
+
+            <button
+                class="suggestion"
+                data-message="What are the latest technology news?"
+            >
+
+                <div class="suggestion-icon">
+                    💻
+                </div>
+
+                <div>
+                    <strong>Technology news</strong>
+                    <small>Fresh tech headlines</small>
+                </div>
+
+            </button>
+
+
+
+            <button
+                class="suggestion"
+                data-message="What are the latest world news?"
+            >
+
+                <div class="suggestion-icon">
+                    🌍
+                </div>
+
+                <div>
+                    <strong>World news</strong>
+                    <small>Latest world stories</small>
+                </div>
+
+            </button>
+
+
+
+            <div class="powered-box">
+
+                <div class="powered-icon">
+                    ✦
+                </div>
+
+                <div>
+
+                    <strong>AI powered</strong>
+
+                    <small>
+                        Built with your weather
+                        & news tools.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- CHAT -->
+
+        <main class="chat">
+
+
+            <!-- CHAT HEADER -->
+
+            <div class="chat-header">
+
+                <div class="chat-avatar">
+                    ✦
+                </div>
+
+                <div class="chat-user">
+
+                    <strong>AURA AI</strong>
+
+                    <small>
+                        <span></span>
+                        Ready to help
+                    </small>
+
+                </div>
+
+
+                <div class="chat-type">
+                    WEATHER + NEWS
+                </div>
+
+            </div>
+
+
+
+            <!-- MESSAGES -->
+
+            <div id="messages" class="messages">
+
+                <div class="message assistant-message">
+
+                    <div class="message-avatar">
+                        ✦
+                    </div>
+
+                    <div class="message-content">
+
+                        <div class="message-name">
+                            AURA
+                        </div>
+
+                        <div class="bubble">
+
+                            Hello! I'm AURA.
+
+                            <br><br>
+
+                            Ask me about the weather
+                            or the latest news, and I'll
+                            find the information for you.
+
+
+                            <div class="starter-buttons">
+
+                                <button
+                                    data-message="What's the weather in Faisalabad?"
+                                >
+                                    ☀️ Faisalabad weather
+                                </button>
+
+                                <button
+                                    data-message="What's the latest news today?"
+                                >
+                                    📰 Latest news
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TYPING -->
+
+            <div id="typing" class="typing">
+
+                <div class="typing-dots">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+                AURA is thinking...
+
+            </div>
+
+
+
+            <!-- INPUT -->
+
+            <form id="chatForm" class="chat-input-area">
+
+                <input
+                    id="messageInput"
+                    type="text"
+                    placeholder="Ask about weather or news..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="sendButton"
+                    type="submit"
+                >
+
+                    <span>Send</span>
+                    <b>→</b>
+
+                </button>
+
+            </form>
+
+
+            <div class="input-hint">
+                AURA can help with weather and news information.
+            </div>
+
+        </main>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            ☀️
+        </div>
+
+        <h3>
+            Live Weather
+        </h3>
+
+        <p>
+            Get current temperature and
+            weather conditions for any city.
+        </p>
+
+    </div>
+
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            📰
+        </div>
+
+        <h3>
+            Fresh News
+        </h3>
+
+        <p>
+            Get the latest headlines for
+            world, technology and other topics.
+        </p>
+
+    </div>
+
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            ✦
+        </div>
+
+        <h3>
+            Natural Conversation
+        </h3>
+
+        <p>
+            Just ask normally. AURA handles
+            the request and returns the result.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-logo">
+        <span>✦</span>
+        AURA
+    </div>
+
+    <div>
+        Weather & News Intelligence
+    </div>
+
+    <div>
+        © 2026 AURA AI
+    </div>
+
+</footer>
+
+
+
+<script>
+
+const form = document.getElementById("chatForm");
+
+const input = document.getElementById("messageInput");
+
+const messages = document.getElementById("messages");
+
+const typing = document.getElementById("typing");
+
+const sendButton = document.getElementById("sendButton");
+
+const newChatButton = document.getElementById("newChatButton");
+
+
+
+/* =========================================
+   HTML ESCAPE
+========================================= */
+
+function escapeHTML(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+
+/* =========================================
+   USER MESSAGE
+========================================= */
+
+function addUserMessage(text) {
+
+    const message = document.createElement("div");
+
+    message.className = "message user-message";
+
+    message.innerHTML = `
+
+        <div class="message-content">
+
+            <div class="message-name user-name">
+                YOU
+            </div>
+
+            <div class="bubble user-bubble">
+
+                ${escapeHTML(text)}
+
+            </div>
+
+        </div>
+
+        <div class="message-avatar user-avatar">
+            U
+        </div>
+
+    `;
+
+    messages.appendChild(message);
+
+    scrollChat();
+
+}
+
+
+
+/* =========================================
+   ASSISTANT MESSAGE
+========================================= */
+
+function addAssistantMessage(data) {
+
+    const message = document.createElement("div");
+
+    message.className = "message assistant-message";
+
+
+    let resultHTML = "";
+
+
+    /* WEATHER CARD */
+
+    if (
+        data.type === "weather" &&
+        data.city
+    ) {
+
+        let temperature = "—";
+
+        if (
+            data.temperature !== null &&
+            data.temperature !== undefined
+        ) {
+
+            temperature =
+                Number(data.temperature).toFixed(1)
+                + "°C";
+
+        }
+
+
+        resultHTML = `
+
+            <div class="weather-result">
+
+                <div class="weather-result-icon">
+                    ☀️
+                </div>
+
+                <div class="weather-result-temp">
+                    ${escapeHTML(temperature)}
+                </div>
+
+                <div class="weather-result-info">
+
+                    <strong>
+                        ${escapeHTML(data.city)}
+                    </strong>
+
+                    <small>
+                        ${escapeHTML(
+                            data.description ||
+                            "Current conditions"
+                        )}
+                    </small>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    /* NEWS CARD */
+
+    if (
+        data.type === "news" &&
+        Array.isArray(data.articles) &&
+        data.articles.length
+    ) {
+
+        resultHTML = `
+
+            <div class="news-list">
+
+                ${data.articles.map(
+                    (article, index) => `
+
+                    <div class="news-item">
+
+                        <div class="news-number">
+                            ${String(index + 1).padStart(2, "0")}
+                        </div>
+
+                        <div class="news-title">
+                            ${escapeHTML(article)}
+                        </div>
+
+                    </div>
+
+                `).join("")}
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    message.innerHTML = `
+
+        <div class="message-avatar">
+            ✦
+        </div>
+
+        <div class="message-content">
+
+            <div class="message-name">
+                AURA
+            </div>
+
+            <div class="bubble">
+
+                ${escapeHTML(
+                    data.message ||
+                    "I couldn't generate a response."
+                )}
+
+                ${resultHTML}
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    messages.appendChild(message);
+
+    scrollChat();
+
+}
+
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+function showError() {
+
+    addAssistantMessage({
+
+        type: "chat",
+
+        message:
+        "Sorry, I'm having trouble connecting right now. Please try again in a moment."
+
+    });
+
+}
+
+
+
+/* =========================================
+   SEND MESSAGE
+========================================= */
+
+async function sendMessage(text) {
+
+    const message = text.trim();
+
+
+    if (!message || sendButton.disabled) {
+
+        return;
+
+    }
+
+
+    addUserMessage(message);
+
+
+    input.value = "";
+
+    sendButton.disabled = true;
+
+    typing.classList.add("show");
+
+
+    try {
+
+        const response = await fetch(
+            "/chat",
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+                    message: message
+                })
+
+            }
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server request failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        addAssistantMessage(data);
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showError();
+
+    }
+
+    finally {
+
+        typing.classList.remove("show");
+
+        sendButton.disabled = false;
+
+        input.focus();
+
+    }
+
+}
+
+
+
+/* =========================================
+   FORM
+========================================= */
+
+form.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        sendMessage(input.value);
+
+    }
+);
+
+
+
+/* =========================================
+   QUICK BUTTONS
+========================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const button =
+            event.target.closest(
+                "[data-message]"
+            );
+
+
+        if (!button) {
+
+            return;
+
+        }
+
+
+        sendMessage(
+            button.dataset.message
+        );
+
+    }
+);
+
+
+
+/* =========================================
+   NEW CHAT
+========================================= */
+
+newChatButton.addEventListener(
+    "click",
+    function() {
+
+        messages.innerHTML = `
+
+            <div class="message assistant-message">
+
+                <div class="message-avatar">
+                    ✦
+                </div>
+
+                <div class="message-content">
+
+                    <div class="message-name">
+                        AURA
+                    </div>
+
+                    <div class="bubble">
+
+                        New conversation started.
+
+                        <br><br>
+
+                        What would you like to know
+                        about the weather or news?
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+        input.value = "";
+
+        input.focus();
+
+    }
+);
+
+
+
+/* =========================================
+   SCROLL
+========================================= */
+
+function scrollChat() {
+
+    messages.scrollTo({
+
+        top: messages.scrollHeight,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+input.focus();
+
+</script>
+
+</body>
+</html>
