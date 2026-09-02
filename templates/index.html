@@ -176,6 +176,58 @@
             document.querySelector(".temp-display p").textContent =
                 capitalize(data.description);
     
+            setWeatherAnimation(data.description);
+    
+        }
+    
+    }
+    
+    
+    /*
+    ========================================
+    SET WEATHER ANIMATION (sun / clouds / rain)
+    ========================================
+    */
+    
+    function setWeatherAnimation(description) {
+    
+        const weatherAnim = document.getElementById("weatherAnim");
+    
+        const text = description.toLowerCase();
+    
+        weatherAnim.classList.remove(
+            "wa-clear", "wa-cloudy", "wa-partly", "wa-rainy"
+        );
+    
+        if (
+            text.includes("rain") ||
+            text.includes("drizzle") ||
+            text.includes("thunderstorm")
+        ) {
+    
+            weatherAnim.classList.add("wa-rainy");
+    
+        }
+    
+        else if (
+            text.includes("partly") ||
+            (text.includes("cloud") && (text.includes("few") || text.includes("scattered")))
+        ) {
+    
+            weatherAnim.classList.add("wa-partly");
+    
+        }
+    
+        else if (text.includes("cloud") || text.includes("overcast")) {
+    
+            weatherAnim.classList.add("wa-cloudy");
+    
+        }
+    
+        else {
+    
+            weatherAnim.classList.add("wa-clear");
+    
         }
     
     }
@@ -283,6 +335,8 @@
     ========================================
     */
     
+    setWeatherAnimation("Partly Cloudy");
+    
     sendBtn.addEventListener("click", sendMessage);
     
     
@@ -334,12 +388,14 @@
                 <i class="fa-solid fa-robot"></i>
                 <span>Nexus Agent</span>
             </div>
-            <div class="status">
-                <span class="dot"></span> Online
+            <div class="nav-actions">
+                <div class="status">
+                    <span class="dot"></span> Online
+                </div>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fa-solid fa-plus"></i> New Chat
+                </button>
             </div>
-            <button class="new-chat-btn" id="newChatBtn">
-                <i class="fa-solid fa-plus"></i> New Chat
-            </button>
         </header>
 
         <!-- Main Dashboard -->
@@ -351,6 +407,14 @@
                     <span class="location">Pakistan</span>
                 </div>
                 <div class="weather-content">
+                    <div class="weather-animation" id="weatherAnim">
+                        <div class="wa-sun"><i class="fa-solid fa-sun"></i></div>
+                        <div class="wa-cloud wa-cloud-1"><i class="fa-solid fa-cloud"></i></div>
+                        <div class="wa-cloud wa-cloud-2"><i class="fa-solid fa-cloud"></i></div>
+                        <div class="wa-rain">
+                            <span></span><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                    </div>
                     <div class="temp-display">
                         <h1>28°</h1>
                         <p>Partly Cloudy</p>
