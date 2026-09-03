@@ -18,7 +18,7 @@ class ChatRequest(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    type: Literal["weather", "news", "chat", "rejection"]
+    type: Literal["weather", "news", "both", "chat", "rejection"]
     message: str
     city: Optional[str] = None
     temperature: Optional[float] = None
