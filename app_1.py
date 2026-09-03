@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import Optional, List, Literal
-from main import run_agent, clear_memory, get_initial_weather
+from main import run_agent, clear_memory
 
 app = FastAPI()
 
@@ -30,12 +30,6 @@ class ChatResponse(BaseModel):
 def home(request: Request):
     clear_memory()
     return templates.TemplateResponse(request, "index.html")
-
-
-@app.get("/initial-weather")
-def initial_weather():
-    """Real weather for the dashboard as soon as the page opens."""
-    return get_initial_weather("Faisalabad")
 
 
 @app.post("/chat")

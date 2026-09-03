@@ -189,37 +189,15 @@
     ========================================
     */
     
-    /*
-    ========================================
-    IS IT NIGHT TIME? (based on the visitor's
-    own device clock — 7 PM to 6 AM counts as night)
-    ========================================
-    */
-
-    function isNightTime() {
-
-        const hour = new Date().getHours();
-
-        return hour >= 19 || hour < 6;
-
-    }
-
-
     function setWeatherAnimation(description) {
     
         const weatherAnim = document.getElementById("weatherAnim");
     
         const text = description.toLowerCase();
-
-        const night = isNightTime();
     
         weatherAnim.classList.remove(
-            "wa-clear", "wa-cloudy", "wa-partly", "wa-rainy", "wa-night"
+            "wa-clear", "wa-cloudy", "wa-partly", "wa-rainy"
         );
-
-        if (night) {
-            weatherAnim.classList.add("wa-night");
-        }
     
         if (
             text.includes("rain") ||
@@ -357,40 +335,7 @@
     ========================================
     */
     
-    /*
-    ========================================
-    LOAD LIVE WEATHER ON PAGE OPEN
-    ========================================
-    */
-
-    async function loadInitialWeather() {
-
-        try {
-
-            const response = await fetch("/initial-weather");
-
-            if (!response.ok) {
-                throw new Error("Failed to load initial weather");
-            }
-
-            const data = await response.json();
-
-            updateWeather(data);
-
-        }
-
-        catch (error) {
-
-            console.error("Initial weather error:", error);
-
-            // Fall back to a neutral animation if the live fetch fails
-            setWeatherAnimation("Partly Cloudy");
-
-        }
-
-    }
-
-    loadInitialWeather();
+    setWeatherAnimation("Partly Cloudy");
     
     sendBtn.addEventListener("click", sendMessage);
     
@@ -464,7 +409,6 @@
                 <div class="weather-content">
                     <div class="weather-animation" id="weatherAnim">
                         <div class="wa-sun"><i class="fa-solid fa-sun"></i></div>
-                        <div class="wa-moon"><i class="fa-solid fa-moon"></i></div>
                         <div class="wa-cloud wa-cloud-1"><i class="fa-solid fa-cloud"></i></div>
                         <div class="wa-cloud wa-cloud-2"><i class="fa-solid fa-cloud"></i></div>
                         <div class="wa-rain">

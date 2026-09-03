@@ -8,14 +8,13 @@
 
 html {
     width: 100%;
-    height: 100%;
     overflow-x: hidden;
 }
 
 body {
     background: #0f172a;
     color: #ffffff;
-    height: 100%;
+    min-height: 100vh;
     width: 100%;
     overflow-x: hidden;
     position: relative;
@@ -42,15 +41,13 @@ body {
 /* Layout Container */
 .app-container {
     width: 100%;
-    max-width: 1200px;
+    width: min(100%, 1200px);
     margin: 0 auto;
-    padding: 2rem;
+    padding: clamp(1rem, 2vw, 2rem);
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    max-height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
-    overflow: hidden;
 }
 
 /* Glassmorphism Card Style */
@@ -136,16 +133,9 @@ body {
 .dashboard {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: clamp(1rem, 2vw, 2rem);
     flex: 1;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.weather-panel,
-.news-panel {
-    min-height: 0;
-    overflow-y: auto;
+    min-width: 0;
 }
 
 /* Panels Common */
@@ -191,15 +181,13 @@ body {
 }
 
 .wa-sun,
-.wa-moon,
 .wa-cloud,
 .wa-rain {
     display: none;
     position: absolute;
 }
 
-.wa-sun,
-.wa-moon {
+.wa-sun {
     top: 0;
     left: 42%;
 }
@@ -208,12 +196,6 @@ body {
     font-size: 3.2rem;
     color: #fbbf24;
     filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.55));
-}
-
-.wa-moon i {
-    font-size: 3rem;
-    color: #e2e8f0;
-    filter: drop-shadow(0 0 10px rgba(226, 232, 240, 0.5));
 }
 
 .wa-cloud i {
@@ -277,21 +259,10 @@ body {
     50%      { transform: translateX(-6px); }
 }
 
-/* Clear / Sunny (daytime) */
-.weather-animation.wa-clear:not(.wa-night) .wa-sun {
+/* Clear / Sunny */
+.weather-animation.wa-clear .wa-sun {
     display: block;
     animation: sun-pulse 3s ease-in-out infinite;
-}
-
-/* Clear (night time) */
-.weather-animation.wa-clear.wa-night .wa-moon {
-    display: block;
-    animation: moon-glow 4s ease-in-out infinite;
-}
-
-@keyframes moon-glow {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(226, 232, 240, 0.4)); }
-    50%      { transform: scale(1.05); filter: drop-shadow(0 0 16px rgba(226, 232, 240, 0.75)); }
 }
 
 /* Cloudy */
@@ -305,18 +276,11 @@ body {
     animation: cloud-drift-2 10s ease-in-out infinite;
 }
 
-/* Partly Cloudy (daytime) */
-.weather-animation.wa-partly:not(.wa-night) .wa-sun {
+/* Partly Cloudy */
+.weather-animation.wa-partly .wa-sun {
     display: block;
     transform: scale(0.85);
     animation: sun-pulse 3s ease-in-out infinite;
-}
-
-/* Partly Cloudy (night time) */
-.weather-animation.wa-partly.wa-night .wa-moon {
-    display: block;
-    transform: scale(0.85);
-    animation: moon-glow 4s ease-in-out infinite;
 }
 
 .weather-animation.wa-partly .wa-cloud-1 {
@@ -428,7 +392,9 @@ body {
 
 /* Agent Chat Area */
 .agent-interaction {
-    margin-top: 2rem;
+    margin-top: clamp(1rem, 2vw, 2rem);
+    width: 100%;
+    min-width: 0;
 }
 
 .agent-message {
@@ -497,58 +463,6 @@ body {
 .send-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
-}
-
-/* Short screens (e.g. 14" laptops, smaller vertical resolution) */
-@media (max-height: 800px) {
-    .app-container {
-        padding: 1.25rem;
-    }
-
-    .top-nav {
-        padding: 0.75rem 1.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .dashboard {
-        gap: 1.25rem;
-    }
-
-    .weather-content {
-        padding: 1.25rem;
-        gap: 1rem;
-    }
-
-    .temp-display h1 {
-        font-size: 3.2rem;
-    }
-
-    .weather-animation {
-        width: 130px;
-        height: 65px;
-    }
-
-    .card-header {
-        padding: 1rem 1.25rem;
-    }
-
-    .news-item {
-        padding: 0.75rem;
-    }
-}
-
-@media (max-height: 650px) {
-    .weather-content {
-        gap: 0.6rem;
-    }
-
-    .temp-display h1 {
-        font-size: 2.4rem;
-    }
-
-    .weather-animation {
-        display: none;
-    }
 }
 
 /* Responsive Design */
@@ -628,3 +542,183 @@ body {
         font-size: 1rem;
     }
 }
+
+/* =========================================================
+   Extra Responsive Fix
+   Keeps the same design but makes the complete UI fit better
+   on short laptop screens and narrow browser windows.
+   ========================================================= */
+
+/* Medium laptop screens */
+@media (max-width: 1200px) {
+    .app-container {
+        padding: 1.25rem;
+    }
+
+    .top-nav {
+        padding: 0.9rem 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .dashboard {
+        gap: 1.25rem;
+    }
+
+    .weather-content {
+        padding: 1.5rem;
+        gap: 1.25rem;
+    }
+
+    .card-header {
+        padding: 1.25rem;
+    }
+
+    .news-list {
+        padding: 1.25rem;
+        gap: 0.8rem;
+    }
+
+    .agent-interaction {
+        margin-top: 1.25rem;
+    }
+}
+
+/* Short laptop screens such as 1366x768 / 1280x720 */
+@media (max-height: 800px) and (min-width: 901px) {
+    .app-container {
+        padding-top: 0.85rem;
+        padding-bottom: 0.85rem;
+    }
+
+    .top-nav {
+        padding-top: 0.65rem;
+        padding-bottom: 0.65rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .dashboard {
+        gap: 1rem;
+    }
+
+    .card-header {
+        padding: 1rem 1.25rem;
+    }
+
+    .weather-content {
+        padding: 1rem 1.25rem;
+        gap: 0.9rem;
+    }
+
+    .weather-animation {
+        width: 150px;
+        height: 70px;
+    }
+
+    .temp-display h1 {
+        font-size: clamp(3.5rem, 6vw, 4.5rem);
+    }
+
+    .weather-details {
+        gap: 0.6rem 1rem;
+    }
+
+    .detail-item {
+        padding: 0.65rem 0.9rem;
+    }
+
+    .news-list {
+        padding: 1rem;
+        gap: 0.7rem;
+    }
+
+    .news-item {
+        padding: 0.8rem;
+    }
+
+    .agent-interaction {
+        margin-top: 0.9rem;
+    }
+
+    .chat-input-wrapper input {
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
+    }
+
+    .send-btn {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+    }
+}
+
+/* Very short screens */
+@media (max-height: 650px) and (min-width: 901px) {
+    .app-container {
+        padding: 0.6rem 1rem;
+    }
+
+    .top-nav {
+        margin-bottom: 0.7rem;
+    }
+
+    .dashboard {
+        gap: 0.8rem;
+    }
+
+    .weather-content {
+        padding: 0.75rem 1rem;
+        gap: 0.65rem;
+    }
+
+    .weather-animation {
+        width: 130px;
+        height: 55px;
+        transform: scale(0.9);
+    }
+
+    .temp-display h1 {
+        font-size: 3.5rem;
+    }
+
+    .news-list {
+        padding: 0.8rem;
+    }
+
+    .agent-interaction {
+        margin-top: 0.7rem;
+    }
+}
+
+/* Prevent grid children from forcing horizontal overflow */
+.dashboard > *,
+.weather-panel,
+.news-panel,
+.agent-interaction,
+.chat-input-wrapper {
+    min-width: 0;
+}
+
+/* Let long news text wrap instead of pushing the layout wider */
+.news-text,
+.news-text h3,
+.news-text p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* Final mobile safety */
+@media (max-width: 900px) {
+    .dashboard {
+        width: 100%;
+    }
+
+    .weather-panel,
+    .news-panel {
+        width: 100%;
+    }
+
+    .agent-interaction {
+        width: 100%;
+    }
+}
+

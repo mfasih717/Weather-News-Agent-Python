@@ -43,34 +43,6 @@ last_tool_data = {
 }
 
 
-def fetch_weather_data(city: str) -> dict:
-    """
-    Plain (non-agent) weather fetch. Used both by the AI tool below
-    and directly by the /initial-weather endpoint, so the homepage
-    can show live weather immediately without waiting on the LLM.
-    Raises ValueError with a friendly message on failure.
-    """
-
-    api_key = os.getenv("WEATHER_API_KEY")
-
-    url = (
-        f"https://api.openweathermap.org/data/2.5/weather"
-        f"?q={city}&appid={api_key}&units=metric"
-    )
-
-    response = requests.get(url, timeout=10)
-    data = response.json()
-
-    if response.status_code != 200:
-        raise ValueError(data.get("message", "City not found"))
-
-    return {
-        "city": city,
-        "temperature": data["main"]["temp"],
-        "description": data["weather"][0]["description"]
-    }
-
-
 @function_tool
 def get_weather(city: str) -> str:
     """Get current weather for a given city."""
@@ -78,17 +50,35 @@ def get_weather(city: str) -> str:
     global last_tool_used, last_tool_data
 
     try:
-        weather = fetch_weather_data(city)
+        api_key = os.getenv("WEATHER_API_KEY")
+
+        url = (
+            f"https://api.openweathermap.org/data/2.5/weather"
+            f"?q={city}&appid={api_key}&units=metric"
+        )
+
+        response = requests.get(url, timeout=10)
+        data = response.json()
+
+        if response.status_code != 200:
+            return f"Error: {data.get('message', 'City not found')}"
+
+        temp = data["main"]["temp"]
+        description = data["weather"][0]["description"]
 
         # Track weather tool
         if "weather" not in last_tool_used:
             last_tool_used.append("weather")
 
-        last_tool_data["weather"] = weather
+        last_tool_data["weather"] = {
+            "city": city,
+            "temperature": temp,
+            "description": description
+        }
 
         return (
             f"{city} currently has a temperature of "
-            f"{weather['temperature']}°C with {weather['description']}."
+            f"{temp}°C with {description}."
         )
 
     except requests.exceptions.RequestException:
@@ -96,9 +86,6 @@ def get_weather(city: str) -> str:
             "Sorry, I couldn't reach the weather service right now. "
             "Please try again in a moment."
         )
-
-    except ValueError as e:
-        return f"Error: {e}"
 
     except Exception:
         return "Sorry, something went wrong while fetching the weather."
@@ -396,26 +383,6 @@ async def run_agent(user_message: str) -> dict:
         )
 
     return agent_response.model_dump()
-
-
-# ---------- INITIAL PAGE-LOAD WEATHER ----------
-
-def get_initial_weather(city: str = "Faisalabad") -> dict:
-    """
-    Used by the /initial-weather endpoint so the dashboard shows
-    real, current weather the moment the page loads.
-    """
-
-    try:
-        return fetch_weather_data(city)
-
-    except Exception:
-        # Fallback so the frontend still has something sensible to show
-        return {
-            "city": city,
-            "temperature": None,
-            "description": "Unavailable"
-        }
 
 
 # ---------- CLEAR MEMORY ----------
